@@ -16,9 +16,9 @@ namespace GameAm.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<GameDto>> CreateWebPoint([FromBody] CreateGameDto dto)
+        public async Task<ActionResult<GameDto>> CreateGame()
         {
-            var game = await _gameService.CreateGame(dto);
+            var game = await _gameService.CreateGame();
 
             return Ok(game);
         }

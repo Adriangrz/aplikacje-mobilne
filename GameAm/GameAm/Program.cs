@@ -6,6 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        b => b.WithOrigins(builder.Configuration["AllowedOrigins"])
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -19,10 +28,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IWebPointService, WebPointService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
+app.UseCors("CorsPolicy");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

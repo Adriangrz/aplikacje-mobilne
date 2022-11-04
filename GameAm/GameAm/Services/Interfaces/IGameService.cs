@@ -4,6 +4,6 @@ namespace GameAm.Services.Interfaces
 {
     public interface IGameService
     {
-        Task<GameDto> CreateGame(CreateGameDto dto);
+        Task<GameDto> CreateGame();
     }
 }

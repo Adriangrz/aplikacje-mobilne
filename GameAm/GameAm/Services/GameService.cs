@@ -17,9 +17,9 @@ namespace GameAm.Services
             _dbContext = dbContext;
         }
 
-        public async Task<GameDto> CreateGame(CreateGameDto dto)
+        public async Task<GameDto> CreateGame()
         {
-            var game = _mapper.Map<Game>(dto);
+            var game = new Game();
             await _dbContext.Games.AddAsync(game);
             await _dbContext.SaveChangesAsync();
 
