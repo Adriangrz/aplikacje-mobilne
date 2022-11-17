@@ -19,10 +19,9 @@ namespace GameAm.Services
             _dbContext = dbContext;
         }
 
-        public async Task<WebPointDto> CreateWP(CreateWebPointDto dto, Guid gameId)
+        public async Task<WebPointDto> CreateWP(CreateWebPointDto dto)
         {
             var webPoint = _mapper.Map<WebPoint>(dto);
-            webPoint.GameId = gameId;
             await _dbContext.WebPoints.AddAsync(webPoint);
             await _dbContext.SaveChangesAsync();
 
@@ -30,9 +29,9 @@ namespace GameAm.Services
             return webPointDto;
         }
 
-        public async Task<List<WebPointDto>> GetWPForGame(Guid gameId)
+        public async Task<List<WebPointDto>> GetWPForGame()
         {
-            var webPoints = await _dbContext.WebPoints.Where(wp => wp.GameId == gameId).ToListAsync();
+            var webPoints = await _dbContext.WebPoints.ToListAsync();
 
             var webPointsDtos = _mapper.Map<List<WebPointDto>>(webPoints);
             return webPointsDtos;

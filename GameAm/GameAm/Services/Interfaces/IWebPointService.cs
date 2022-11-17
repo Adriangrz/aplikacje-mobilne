@@ -5,8 +5,8 @@ namespace GameAm.Services.Interfaces
 {
     public interface IWebPointService
     {
-        Task<WebPointDto> CreateWP(CreateWebPointDto dto, Guid gameId);
-        Task<List<WebPointDto>> GetWPForGame(Guid gameId);
+        Task<WebPointDto> CreateWP(CreateWebPointDto dto);
+        Task<List<WebPointDto>> GetWPForGame();
         Task DeleteWP(Guid webPointId);
     }
 }

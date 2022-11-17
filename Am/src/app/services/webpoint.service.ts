@@ -9,9 +9,9 @@ import { WebPoint } from '../interfaces/webpoint.interface';
 export class WebPointService {
   constructor(private http: HttpClient) {}
 
-  getWebPoints(gameId: string) {
+  getWebPoints() {
     return this.http
-      .get<WebPoint[]>(`/api/Game/${gameId}/WebPoint`)
+      .get<WebPoint[]>(`/api/WebPoint`)
       .pipe(catchError(this.handleError));
   }
 

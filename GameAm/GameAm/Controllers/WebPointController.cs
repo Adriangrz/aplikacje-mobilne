@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameAm.Controllers
 {
-    [Route("api/Game/{gameId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class WebPointController : ControllerBase
     {
@@ -16,16 +16,16 @@ namespace GameAm.Controllers
             _webPointService = webPointService;
         }
         [HttpGet]
-        public async Task<ActionResult<List<WebPointDto>>> GetAll([FromRoute] Guid gameId)
+        public async Task<ActionResult<List<WebPointDto>>> GetAll()
         {
-            var result = await _webPointService.GetWPForGame(gameId);
+            var result = await _webPointService.GetWPForGame();
 
             return Ok(result);
         }
         [HttpPost]
-        public async Task<ActionResult<WebPointDto>> CreateWebPoint([FromBody] CreateWebPointDto dto, [FromRoute] Guid gameId)
+        public async Task<ActionResult<WebPointDto>> CreateWebPoint([FromBody] CreateWebPointDto dto)
         {
-            var webPoint = await _webPointService.CreateWP(dto,gameId);
+            var webPoint = await _webPointService.CreateWP(dto);
 
             return Ok(webPoint);
         }

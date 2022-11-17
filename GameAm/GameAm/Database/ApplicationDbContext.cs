@@ -13,7 +13,6 @@ namespace GameAm.Database
         {
         }
 
-        public DbSet<Game> Games { get; set; }
         public DbSet<WebPoint> WebPoints { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { IonModal } from '@ionic/angular';
 import * as L from 'leaflet';
 import { WebPointService } from '../services/webpoint.service';
+import { WebPoint } from '../interfaces/webpoint.interface';
+import { Geolocation } from '@awesome-cordova-plugins/geolocation/ngx';
 
 @Component({
   selector: 'app-home',
@@ -8,24 +11,58 @@ import { WebPointService } from '../services/webpoint.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  @ViewChild(IonModal) modal: IonModal;
   map: any;
+  points: number = 0;
+  currentWebPoint: WebPoint;
+  answer: string;
+  finishedWebPointsIds: string[] = [];
 
-  constructor(private webPointService: WebPointService) {}
+  constructor(
+    private webPointService: WebPointService
+  ) // private geolocation: Geolocation
+  {}
+
+  markerClick(webpoint: WebPoint) {
+    this.currentWebPoint = webpoint;
+    this.modal.present();
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(null, 'confirm');
+    // this.geolocation
+    //   .getCurrentPosition()
+    //   .then((resp) => {
+    //     console.log(resp);
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error getting location', error);
+    //   });
+    // if (
+    //   this.answer === this.currentWebPoint.answer &&
+    //   !this.finishedWebPointsIds.find((x) => x === this.currentWebPoint.id)
+    // ) {
+    //   this.finishedWebPointsIds.push(this.currentWebPoint.id);
+    //   this.points += 1;
+    // }
+  }
 
   ionViewDidEnter() {
     this.loadMap();
-    this.webPointService
-      .getWebPoints('f5b2e3e1-7bb6-4b2b-a650-30795cff936c')
-      .subscribe({
-        next: (data) => {
-          data.forEach((element) => {
-            L.marker([element.lat, element.long])
-              .bindPopup(element.task)
-              .addTo(this.map);
-          });
-        },
-        error: (err) => {},
-      });
+    this.webPointService.getWebPoints().subscribe({
+      next: (data) => {
+        data.forEach((element) => {
+          L.marker([element.lat, element.long])
+            .on('click', this.markerClick.bind(this, element))
+            .addTo(this.map);
+        });
+      },
+      error: (err) => {},
+    });
   }
 
   loadMap() {

@@ -3,5 +3,6 @@ export interface WebPoint {
   lat: number;
   long: number;
   task: string;
+  answer: string;
   gameId: string;
 }

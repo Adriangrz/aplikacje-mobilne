@@ -10,7 +10,6 @@ namespace GameAm.Mapping
         {
             CreateMap<WebPoint, WebPointDto>().ReverseMap();
             CreateMap<CreateWebPointDto, WebPoint>();
-            CreateMap<Game, GameDto>().ReverseMap();
         }
     }
 }

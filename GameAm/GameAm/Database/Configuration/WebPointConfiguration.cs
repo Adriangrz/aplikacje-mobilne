@@ -9,9 +9,6 @@ namespace GameAm.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<WebPoint> builder)
         {
-            builder.HasOne<Game>(wp => wp.Game)
-            .WithMany(g => g.WebPoints)
-            .HasForeignKey(wp => wp.GameId);
         }
     }
 }
