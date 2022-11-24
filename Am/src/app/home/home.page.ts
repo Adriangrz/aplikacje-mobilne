@@ -16,12 +16,13 @@ export class HomePage {
   points: number = 0;
   currentWebPoint: WebPoint;
   answer: string;
+  error: string = '';
   finishedWebPointsIds: string[] = [];
 
   constructor(
-    private webPointService: WebPointService
-  ) // private geolocation: Geolocation
-  {}
+    private webPointService: WebPointService,
+    private geolocation: Geolocation
+  ) {}
 
   markerClick(webpoint: WebPoint) {
     this.currentWebPoint = webpoint;
@@ -33,22 +34,37 @@ export class HomePage {
   }
 
   confirm() {
-    this.modal.dismiss(null, 'confirm');
-    // this.geolocation
-    //   .getCurrentPosition()
-    //   .then((resp) => {
-    //     console.log(resp);
-    //   })
-    //   .catch((error) => {
-    //     console.log('Error getting location', error);
-    //   });
-    // if (
-    //   this.answer === this.currentWebPoint.answer &&
-    //   !this.finishedWebPointsIds.find((x) => x === this.currentWebPoint.id)
-    // ) {
-    //   this.finishedWebPointsIds.push(this.currentWebPoint.id);
-    //   this.points += 1;
-    // }
+    this.geolocation
+      .getCurrentPosition()
+      .then((resp) => {
+        if (
+          this.answer === this.currentWebPoint.answer &&
+          resp.coords.latitude === this.currentWebPoint.lat &&
+          resp.coords.longitude === this.currentWebPoint.long &&
+          !this.finishedWebPointsIds.find((x) => x === this.currentWebPoint.id)
+        ) {
+          this.finishedWebPointsIds.push(this.currentWebPoint.id);
+          this.points += 1;
+          this.modal.dismiss(null, 'confirm');
+        }
+        if (this.answer !== this.currentWebPoint.answer)
+          this.error = 'Podano błędną odpowiedź';
+        if (
+          this.finishedWebPointsIds.find((x) => x === this.currentWebPoint.id)
+        )
+          this.error = 'Ten punkt został już odkryty';
+        if (
+          !(
+            resp.coords.latitude === this.currentWebPoint.lat &&
+            resp.coords.longitude === this.currentWebPoint.long
+          )
+        )
+          this.error = 'Musisz być w tej samej lokalizacji';
+        console.log(resp);
+      })
+      .catch((error) => {
+        console.log('Error getting location', error);
+      });
   }
 
   ionViewDidEnter() {
